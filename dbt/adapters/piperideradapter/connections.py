@@ -24,7 +24,7 @@ class PipeRiderAdapterCredentials(Credentials):
     schema: str = "main"
     host: str = "somewhere"
 
-    _ALIASES = {}
+    _ALIASES = {"description": "path"}
 
     @property
     def type(self):
