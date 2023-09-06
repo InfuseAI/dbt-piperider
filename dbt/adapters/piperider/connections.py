@@ -1,12 +1,13 @@
 from contextlib import contextmanager
 from dataclasses import dataclass
-from typing import Tuple, List
+from typing import Tuple, List, Dict, Hashable, Optional
 
 import agate
 import dbt.exceptions  # noqa
 from dbt.adapters.base import Credentials
+from dbt.adapters.base.query_headers import MacroQueryStringSetter
 from dbt.adapters.sql import SQLConnectionManager
-from dbt.contracts.connection import AdapterResponse
+from dbt.contracts.connection import AdapterResponse, AdapterRequiredConfig, Connection
 
 
 # from dbt.logger import GLOBAL_LOGGER as logger
@@ -50,11 +51,29 @@ class PipeRiderAdapterCredentials(Credentials):
         return ()
 
 
+class FakeLock:
+    def __enter__(self):
+        """In __enter__()"""
+        pass
+
+    def __exit__(self, exception_type, exception_value, exception_traceback):
+        """In __exit__()"""
+        pass
+
+
 class PipeRiderAdapterConnectionManager(SQLConnectionManager):
+    def __init__(self, profile: AdapterRequiredConfig):
+        self.profile = profile
+        self.thread_connections: Dict[Hashable, Connection] = {}
+        self.lock: FakeLock = FakeLock()  # type: ignore
+        self.query_header: Optional[MacroQueryStringSetter] = None
+
     def cancel_open(self) -> List[str]:
         return super().cancel_open()
 
-    def execute(self, sql: str, auto_begin: bool = False, fetch: bool = False) -> Tuple[AdapterResponse, agate.Table]:
+    def execute(
+        self, sql: str, auto_begin: bool = False, fetch: bool = False, limit: Optional[int] = None
+    ) -> Tuple[AdapterResponse, agate.Table]:
         return super().execute(sql, auto_begin, fetch)
 
     def begin(self):

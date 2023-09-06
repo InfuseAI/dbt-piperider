@@ -85,7 +85,7 @@ class PipeRiderAdapter(MockAdapter):
     Controls actual implmentation of adapter, and ability to override certain methods.
     """
 
-    ConnectionManager = PipeRiderAdapterConnectionManager
+    ConnectionManager = PipeRiderAdapterConnectionManager  # type: ignore
 
     @classmethod
     def date_function(cls):
