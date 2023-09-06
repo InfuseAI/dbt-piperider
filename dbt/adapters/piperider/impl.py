@@ -1,6 +1,6 @@
 from dbt.adapters.base import BaseAdapter as adapter_cls
 
-from dbt.adapters.piperideradapter import PipeRiderAdapterConnectionManager
+from dbt.adapters.piperider import PipeRiderAdapterConnectionManager
 
 
 class PipeRiderAdapterAdapter(adapter_cls):
