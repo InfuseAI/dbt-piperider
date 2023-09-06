@@ -7,7 +7,7 @@ from dbt.include import piperideradapter
 
 
 Plugin = AdapterPlugin(
-    adapter=PipeRiderAdapterAdapter,
+    adapter=PipeRiderAdapterAdapter,  # type: ignore
     credentials=PipeRiderAdapterCredentials,
     include_path=piperideradapter.PACKAGE_PATH,
 )
