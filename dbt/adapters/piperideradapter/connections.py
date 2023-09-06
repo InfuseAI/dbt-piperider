@@ -20,13 +20,16 @@ class PipeRiderAdapterCredentials(Credentials):
     # port: int
     # username: str
     # password: str
+    database: str = "main"
+    schema: str = "main"
+    host: str = "somewhere"
 
-    _ALIASES = {"dbname": "database", "pass": "password", "user": "username"}
+    _ALIASES = {}
 
     @property
     def type(self):
         """Return name of adapter."""
-        return "piperideradapter"
+        return "piperider"
 
     @property
     def unique_field(self):
@@ -40,11 +43,11 @@ class PipeRiderAdapterCredentials(Credentials):
         """
         List of keys to display in the `dbt debug` output.
         """
-        return ("host", "port", "username", "user")
+        return ()
 
 
 class PipeRiderAdapterConnectionManager(connection_cls):
-    TYPE = "piperideradapter"
+    TYPE = "piperider"
 
     @contextmanager
     def exception_handler(self, sql: str):
