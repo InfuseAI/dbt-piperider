@@ -3,7 +3,7 @@ from dbt.adapters.base import BaseAdapter as adapter_cls
 from dbt.adapters.piperider import PipeRiderAdapterConnectionManager
 
 
-class PipeRiderAdapterAdapter(adapter_cls):
+class PipeRiderAdapter(adapter_cls):
     """
     Controls actual implmentation of adapter, and ability to override certain methods.
     """
@@ -17,5 +17,6 @@ class PipeRiderAdapterAdapter(adapter_cls):
         """
         return "datenow()"
 
-
-# may require more build out to make more user friendly to confer with team and community.
+    @classmethod
+    def is_cancelable(cls) -> bool:
+        return False
