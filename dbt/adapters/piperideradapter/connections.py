@@ -1,11 +1,12 @@
 from contextlib import contextmanager
 from dataclasses import dataclass
-import dbt.exceptions # noqa
+import dbt.exceptions  # noqa
 from dbt.adapters.base import Credentials
 
 from dbt.adapters.base import BaseConnectionManager as connection_cls
 
-from dbt.logger import GLOBAL_LOGGER as logger
+# from dbt.logger import GLOBAL_LOGGER as logger
+
 
 @dataclass
 class PipeRiderAdapterCredentials(Credentials):
@@ -20,11 +21,7 @@ class PipeRiderAdapterCredentials(Credentials):
     # username: str
     # password: str
 
-    _ALIASES = {
-        "dbname":"database",
-        "pass":"password",
-        "user":"username"
-    }
+    _ALIASES = {"dbname": "database", "pass": "password", "user": "username"}
 
     @property
     def type(self):
@@ -43,11 +40,11 @@ class PipeRiderAdapterCredentials(Credentials):
         """
         List of keys to display in the `dbt debug` output.
         """
-        return ("host","port","username","user")
+        return ("host", "port", "username", "user")
+
 
 class PipeRiderAdapterConnectionManager(connection_cls):
     TYPE = "piperideradapter"
-
 
     @contextmanager
     def exception_handler(self, sql: str):
@@ -97,7 +94,7 @@ class PipeRiderAdapterConnectionManager(connection_cls):
         pass
 
     @classmethod
-    def get_response(cls,cursor):
+    def get_response(cls, cursor):
         """
         Gets a cursor object and returns adapter-specific information
         about the last executed command generally a AdapterResponse ojbect
