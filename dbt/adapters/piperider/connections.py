@@ -1,9 +1,13 @@
 from contextlib import contextmanager
 from dataclasses import dataclass
+from typing import Tuple, List
+
+import agate
 import dbt.exceptions  # noqa
 from dbt.adapters.base import Credentials
+from dbt.adapters.sql import SQLConnectionManager
+from dbt.contracts.connection import AdapterResponse
 
-from dbt.adapters.base import BaseConnectionManager as connection_cls
 
 # from dbt.logger import GLOBAL_LOGGER as logger
 
@@ -46,7 +50,19 @@ class PipeRiderAdapterCredentials(Credentials):
         return ()
 
 
-class PipeRiderAdapterConnectionManager(connection_cls):
+class PipeRiderAdapterConnectionManager(SQLConnectionManager):
+    def cancel_open(self) -> List[str]:
+        return super().cancel_open()
+
+    def execute(self, sql: str, auto_begin: bool = False, fetch: bool = False) -> Tuple[AdapterResponse, agate.Table]:
+        return super().execute(sql, auto_begin, fetch)
+
+    def begin(self):
+        super().begin()
+
+    def commit(self):
+        super().commit()
+
     TYPE = "piperider"
 
     @contextmanager
